@@ -15,12 +15,11 @@
  */
 package com.example.demo.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -31,9 +30,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
  */
 @EnableWebSecurity
 public class DefaultSecurityConfig {
-
-    @Autowired
-    UserDetailsImplementation userDetailsService;
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -46,28 +42,20 @@ public class DefaultSecurityConfig {
     }
     // @formatter:on
 
- /*   // @formatter:off
+//    // @formatter:off
 //    @Bean
-    UserDetailsService users() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user1")
-                .password("password")
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }*/
+//    UserDetailsService users() {
+//        UserDetails user = User.withDefaultPasswordEncoder()
+//                .username("user@spring.io")
+//                .password("password")
+//                .roles("USER")
+//                .build();
+//        return new InMemoryUserDetailsManager(user);
+//    }
 
     @Bean
-    public SCryptPasswordEncoder passwordEncoder() {
-        return new SCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    //
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService);
-        return provider;
-    }
 }

@@ -1,25 +1,24 @@
 package com.example.demo.config;
 
 
+import java.util.Optional;
+
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
-@Configuration()
+@Component
 public class UserDetailsImplementation implements UserDetailsService {
     private final UserService userService;
     public static final String EMAIL = "^[A-Za-z0-9._+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
     public static final String MOBILE_NO = "[0-9]+";
 
-    @Autowired
     public UserDetailsImplementation(UserService userService) {
         this.userService = userService;
     }

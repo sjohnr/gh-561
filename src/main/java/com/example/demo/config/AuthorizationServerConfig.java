@@ -15,11 +15,14 @@
  */
 package com.example.demo.config;
 
+import java.util.UUID;
+
 import com.example.demo.jose.Jwks;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -38,8 +41,6 @@ import org.springframework.security.oauth2.server.authorization.config.ClientSet
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.UUID;
-
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
 
@@ -54,7 +55,9 @@ public class AuthorizationServerConfig {
     public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate) {
         RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("test")
-                .clientSecret("test")
+                // This secret MUST be encoded using your chosen PasswordEncoder
+                // "{noop}test" is just an example
+                .clientSecret("{noop}test")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
